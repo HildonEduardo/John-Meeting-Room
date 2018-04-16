@@ -1,0 +1,84 @@
+extends layout
+block content
+  h1 Data da reunião
+  .grid
+    .u-sm-16
+    form(action="/addmeeting", method="post")
+      label Data:
+      input(type="text" placeholder="data da reuniao" name="day")#select-date
+    
+      h3#selected-date
+
+
+      label Inicio:
+      input(type="text", name="initTime")#init-time
+  
+      label Fim:
+      input(type="text", name="endTime")#end-time
+
+      if user
+        input(type="submit", value="solicitar reserva" )
+      if !user
+        li
+            a(href='/login') Login
+        li
+            a(href='/register') Register
+
+
+    form(action="/searchdate", method="post")
+      label Data:
+      input(type="text" placeholder="data" name="searchday")#current-date
+      input(type="submit", value="procurar")
+
+    
+      h3#current-date
+      if (roomsDate)
+        if (roomsDate.length)
+            table
+                thead
+                    tr: th Reservas
+                tbody
+                    each roomDate in roomsDate
+                        tr#roomdate_list_item  
+                            td #{roomDate.day}- #{roomDate.dateInit} - #{roomDate.dateEnd} - #{roomDate.username}
+
+                        
+
+
+        if (!roomsDate.length)
+            h3 Sem horarios para esse dia
+
+
+
+
+  script.
+    $(function() {
+      $('#select-date').datepicker({
+        dateFormat: 'dd/mm/yy',
+        onSelect: function (evt, ui) {
+            console.log(ui.selectedDay, ui.selectedMonth, ui.selectedYear)
+
+        }
+      });
+      
+    });
+
+
+    $(function() {
+      $('#current-date').datepicker({
+        dateFormat: 'dd/mm/yy',
+        onSelect: function (evt, ui) {
+            console.log(ui.selectedDay, ui.selectedMonth, ui.selectedYear)
+
+        }
+      });
+      
+    });
+
+    $(function() {  
+        $('#init-time').timepicker({ timeFormat: 'HH:mm', startTime :'09:00', minTime:'10:00', maxTime:'18:00', interval : 15 });
+     });  
+
+    $(function() {  
+        $('#end-time').timepicker({ timeFormat: 'HH:mm', startTime :'09:00',minTime:'10:00', maxTime:'18:00', interval : 15});
+     });

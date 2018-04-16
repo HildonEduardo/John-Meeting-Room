@@ -1,0 +1,44 @@
+extends layout
+block content
+  h1 Data da reunião - (#{searchday})
+  .grid
+    .u-sm-16
+
+    form(action="/searchdate", method="post")
+      label Data:
+      input(type="text" placeholder="data" name="searchday")#currentDate
+
+      input(type="submit", value="procurar")
+
+    
+      h3#current-date
+        if (roomsDate)
+            if (roomsDate.length)
+                table
+                    thead
+                        tr: th Reservas
+                    tbody
+                        each roomDate in roomsDate
+                            tr#roomdate_list_item  
+                                td #{roomDate.dateInit} - #{roomDate.dateEnd} - #{roomDate.username}
+
+                            
+
+
+            if (!roomsDate.length)
+                h3 Sem horarios para esse dia
+
+
+
+
+  script.
+    $(function() {
+      $('#currentDate').datepicker({
+        dateFormat: 'dd/mm/yy',
+        onSelect: function (evt, ui) {
+            console.log(ui.selectedDay, ui.selectedMonth, ui.selectedYear)
+
+        }
+      });
+      
+    });
